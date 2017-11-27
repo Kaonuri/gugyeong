@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 13
-  productGUID: b6bc6231ba6f08847a1cf6a8dee1234b
+  productGUID: 3da7527b08fcd514d80d15636354b9eb
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   defaultScreenOrientation: 4
@@ -12,7 +12,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: gugyeong
+  productName: New Unity Project 1
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -521,14 +521,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: gugyeong
+  metroPackageName: New Unity Project 1
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: gugyeong
+  metroApplicationDescription: New Unity Project 1
   wsaImages: {}
   metroTileShortName: 
   metroCommandLineArgsFile: 
@@ -603,9 +603,9 @@ PlayerSettings:
     UNet: 1
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: 2e951b9b-3cc0-4502-afac-953fce02d4c4
-  projectName: gugyeong
-  organizationId: varshia
+  cloudProjectId: bb879292-415e-44af-a0ff-f04f83f3c54d
+  projectName: New Unity Project 1 (4)
+  organizationId: kaonuri
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
