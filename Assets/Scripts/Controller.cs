@@ -13,7 +13,8 @@ public class Controller : MonoBehaviour
         var webViewGameObject = new GameObject("UniWebView");
         webView = webViewGameObject.AddComponent<UniWebView>();
 
-        webView.Frame = new Rect(0, 0, Screen.width, Screen.height/2f);        
+        webView.ReferenceRectTransform = GetComponent<RectTransform>();
+        // webView.Frame = new Rect(0, 0, Screen.width, Screen.height/2f);        
         url = UniWebViewHelper.StreamingAssetURLForPath("local_www/" + url);
         webView.SetVerticalScrollBarEnabled(false);
         webView.Load(url);

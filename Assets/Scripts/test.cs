@@ -6,22 +6,12 @@ using UnityEngine.UI;
 public class test : MonoBehaviour
 {
     private Text text;
-//    public UniWebView webview;
-//
-//    private void Start()
-//    {
-//        var url = UniWebViewHelper.StreamingAssetURLForPath("local_www/test.html");
-//        webview.Load(url);
-//        webview.Show();
-//    }
+    public UniWebView webview;
 
     private void Start()
     {
-        text = GetComponent<Text>();
-    }
-
-    private void Update()
-    {
-        text.text = LocationManager.Instance.LastAddress;
+        var url = UniWebViewHelper.StreamingAssetURLForPath("local_www/test.html");
+        webview.Load(url);
+        webview.Show();
     }
 }
