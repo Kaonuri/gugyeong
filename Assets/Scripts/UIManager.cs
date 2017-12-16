@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : MonoSingleton<UIManager>
-{
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+{   
+    public MainView MainView;
+    public NeighborhoodView NeighborhoodView;
+    public SettingView SettingView;
+
+    private void Awake()
+    {
+        MainView.gameObject.SetActive(true);
+        NeighborhoodView.gameObject.SetActive(false);
+        SettingView.gameObject.SetActive(false);
+    }    
 }

@@ -1,40 +1,49 @@
-﻿using System;
-using System.Collections;
-using System.Text;
+﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class LocationManager : MonoSingleton<LocationManager>
 {
-    public bool UseLocationService = true;
+    [SerializeField] private bool _enableByRequest = true;
 
-    [SerializeField] private int _timeOut = 5;
-    [SerializeField] private string _apiKey = "AIzaSyCEr1nTAojBOC8CLJo0tHTjt-45hoRVPv0";
+    public float LocationUpdateInterval = 0.2f;
+    public int MaxWait = 20;
 
-    private bool _isUpdating = false;
-    
-    public LocationInfo LastData { get; private set; }
-    public string LastAddress { get; private set; }
+    public LocationInfo LastLocationData { private set; get; }
 
-    public void UpdateAddress()
+    public void StartLocationService()
     {
-        if (!_isUpdating)
+        LocationService service = Input.location;
+
+        if (!_enableByRequest)
         {
-            _isUpdating = true;
-            StartCoroutine(UpdateAddressProcess());
+            Debug.LogError("Location service is not enabled by requset");
+            return;
+        }
+
+        if (!service.isEnabledByUser)
+        {
+            Debug.LogError("Location service is not enabled by user");
+            return;
+        }
+
+        if (service.status == LocationServiceStatus.Stopped)
+        {
+            StartCoroutine(StartLolcationServiceCoroutine());
+        }
+        else
+        {
+            Debug.LogWarning("Location service can only be started when status is stopped");
         }
     }
 
-    private IEnumerator UpdateAddressProcess()
+    private IEnumerator StartLolcationServiceCoroutine()
     {
-        if (!Input.location.isEnabledByUser)
-            yield break;
+        LocationService service = Input.location;
 
-        Input.location.Start();
+        service.Start();
 
-        int maxWait = _timeOut;
-
-        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+        int maxWait = MaxWait;
+        while (service.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
             yield return new WaitForSeconds(1);
             maxWait--;
@@ -42,55 +51,48 @@ public class LocationManager : MonoSingleton<LocationManager>
 
         if (maxWait < 1)
         {
-            print("Timed out");
-            yield break;
+            Debug.LogError("Location service timed out");
+            yield break; 
         }
 
-        if (Input.location.status == LocationServiceStatus.Failed)
+        if (service.status == LocationServiceStatus.Failed)
         {
-            print("Unable to determine device location");
+            Debug.LogError("Location service failed");
             yield break;
+        }
+        else if (service.status == LocationServiceStatus.Running)
+        {
+            Debug.Log("Location service is running");
+            StartCoroutine(RunLocationServiceCoroutine());
         }
         else
         {
-            LastData = Input.location.lastData;
-
-            yield return GetAddressProcess(LastData.latitude, LastData.longitude, _apiKey);
+            Debug.LogError("Unknown Error!");
         }
-
-        Input.location.Stop();
-        _isUpdating = false;
     }
 
-    private IEnumerator GetAddressProcess(float latitude, float longitude, string apiKey)
+    private IEnumerator RunLocationServiceCoroutine()
     {
-        string url = String.Format("https://maps.googleapis.com/maps/api/geocode/json?latlng={0},{1}&key={2}&language=ko", latitude, longitude, apiKey);
+        LocationService service = Input.location;
 
-        UnityWebRequest www = UnityWebRequest.Get(url);
-        www.downloadHandler = new DownloadHandlerBuffer();
-        www.SendWebRequest();
-        while (!www.isDone)
+        while (service.status == LocationServiceStatus.Running)
         {
-            Debug.Log(www.downloadProgress);
-            yield return null;
+            LastLocationData = service.lastData;
+            Debug.Log("Location: " + LastLocationData.latitude + " " + LastLocationData.longitude + " " + LastLocationData.altitude + " " + LastLocationData.horizontalAccuracy + " " + LastLocationData.timestamp);
+            yield return new WaitForSeconds(LocationUpdateInterval);
+        }
+    }
+    
+
+    public void StopLocationService()
+    {
+        LocationService service = Input.location;
+        if (service.status == LocationServiceStatus.Stopped)
+        {
+            Debug.Log("Location service is already stopped");
+            return;
         }
 
-        if (www.isNetworkError)
-        {
-            Debug.Log(www.error);
-        }
-        else
-        {
-            Debug.Log("Done");
-//            Debug.Log("Downloaded: " + www.downloadHandler.text);
-
-            byte[] results = www.downloadHandler.data;
-            Data data = JsonManager.Instance.GetData(Encoding.UTF8.GetString(results));
-
-            if (data.status == "OK")
-            {
-                LastAddress = data.results[0].formatted_address.Replace("대한민국 ", "");
-            }
-        }
+        service.Stop();
     }
 }

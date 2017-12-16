@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class test : MonoBehaviour
 {
-    private Text text;
+    public Text text;
     public UniWebView webview;
 
     private void Start()
