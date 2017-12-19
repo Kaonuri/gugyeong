@@ -22,6 +22,19 @@ public class MainView : View
         float lat = LocationManager.Instance.LastLocationData.latitude;
         float lng = LocationManager.Instance.LastLocationData.longitude;
         GeocodingManager.Instance.ReverseGeocoding(lat, lng, UpdateAddress);
+        List<YoutubeData> youtubeDataList = YoutubeDataManager.Instance.YoutubeDataList;
+        List<YoutubeDataManager.PlaceInfo> placeInfoList = YoutubeDataManager.Instance.PlaceInfoList;
+
+        AppManager.Instance.NearbyYoutubeDataList.Clear();
+
+        for (int i = 0; i < placeInfoList.Count; i++)
+        {
+            float distance = LocationManager.Instance.CalculateDistanceBetweenPlaces(lat, lng, placeInfoList[i].Lat, placeInfoList[i].Lng);
+            if (distance <= 100f)
+            {                
+                AppManager.Instance.NearbyYoutubeDataList.Add(youtubeDataList[i]);
+            }
+        }
     }
 
     private void UpdateAddress(string address)

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class View : MonoBehaviour
+public abstract class View : MonoBehaviour
 {
-
 }

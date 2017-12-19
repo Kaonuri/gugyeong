@@ -56,19 +56,13 @@ public class GeocodingManager : MonoSingleton<GeocodingManager>
 
     [SerializeField] private string ApiKey = "AIzaSyCEr1nTAojBOC8CLJo0tHTjt-45hoRVPv0";
 
-    public void Geocoding(string address, Action<float, float> onComplete)
+    public void Geocoding(string address, Action<float, float> onComplete = null)
     {
         StartCoroutine(GeocodingCoroutine(address, onComplete));
     }
 
     private IEnumerator GeocodingCoroutine(string address, Action<float, float> onComplete)
     {
-        if (Input.location.status != LocationServiceStatus.Running)
-        {
-            Debug.LogWarning("Location service is not running");
-            yield break;
-        }
-
         address = address.Replace(' ', '+');
 
         string url = string.Format("https://" + "maps.googleapis.com/maps/api/geocode/json?address={0}&region=kr&language=ko&key={1}", address, ApiKey);
@@ -95,24 +89,19 @@ public class GeocodingManager : MonoSingleton<GeocodingManager>
 
             if (data.status == "OK")
             {
-                onComplete(data.results[0].geometry.location.lat, data.results[0].geometry.location.lng);
+                if(onComplete != null)
+                    onComplete(data.results[0].geometry.location.lat, data.results[0].geometry.location.lng);
             }
         }
     }
 
-    public void ReverseGeocoding(float latitude, float longitude, Action<string> onComplete)
+    public void ReverseGeocoding(float latitude, float longitude, Action<string> onComplete = null)
     {
         StartCoroutine(ReverseGeocodingCoroutine(latitude, longitude, onComplete));
     }
 
     private IEnumerator ReverseGeocodingCoroutine(float latitude, float longitude, Action<string> onComplete)
     {
-        if (Input.location.status != LocationServiceStatus.Running)
-        {
-            Debug.LogWarning("Location service is not running");
-            yield break;
-        }
-
         string url = string.Format("https://" + "maps.googleapis.com/maps/api/geocode/json?latlng={0},{1}&key={2}&language=ko", latitude, longitude, ApiKey);
 
         UnityWebRequest www = UnityWebRequest.Get(url);
@@ -134,7 +123,8 @@ public class GeocodingManager : MonoSingleton<GeocodingManager>
 
             if (data.status == "OK")
             {
-                onComplete(data.results[0].formatted_address);
+                if(onComplete != null)
+                    onComplete(data.results[0].formatted_address);
             }
         }
     }

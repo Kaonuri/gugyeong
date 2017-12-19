@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 
 public class LocationManager : MonoSingleton<LocationManager>
@@ -10,7 +12,7 @@ public class LocationManager : MonoSingleton<LocationManager>
 
     public LocationInfo LastLocationData { private set; get; }
 
-    public void StartLocationService()
+    public void StartLocationService(Action onComplete = null)
     {
         LocationService service = Input.location;
 
@@ -27,8 +29,8 @@ public class LocationManager : MonoSingleton<LocationManager>
         }
 
         if (service.status == LocationServiceStatus.Stopped)
-        {
-            StartCoroutine(StartLolcationServiceCoroutine());
+        {            
+            StartCoroutine(StartLolcationServiceCoroutine(onComplete));
         }
         else
         {
@@ -36,7 +38,7 @@ public class LocationManager : MonoSingleton<LocationManager>
         }
     }
 
-    private IEnumerator StartLolcationServiceCoroutine()
+    private IEnumerator StartLolcationServiceCoroutine(Action onComplete)
     {
         LocationService service = Input.location;
 
@@ -63,6 +65,11 @@ public class LocationManager : MonoSingleton<LocationManager>
         else if (service.status == LocationServiceStatus.Running)
         {
             Debug.Log("Location service is running");
+            LastLocationData = service.lastData;
+
+            if (onComplete != null)
+                onComplete();
+
             StartCoroutine(RunLocationServiceCoroutine());
         }
         else
@@ -78,7 +85,7 @@ public class LocationManager : MonoSingleton<LocationManager>
         while (service.status == LocationServiceStatus.Running)
         {
             LastLocationData = service.lastData;
-            Debug.Log("Location: " + LastLocationData.latitude + " " + LastLocationData.longitude + " " + LastLocationData.altitude + " " + LastLocationData.horizontalAccuracy + " " + LastLocationData.timestamp);
+//            Debug.Log("Location: " + LastLocationData.latitude + " " + LastLocationData.longitude + " " + LastLocationData.altitude + " " + LastLocationData.horizontalAccuracy + " " + LastLocationData.timestamp);
             yield return new WaitForSeconds(LocationUpdateInterval);
         }
     }
@@ -94,5 +101,22 @@ public class LocationManager : MonoSingleton<LocationManager>
         }
 
         service.Stop();
+    }
+
+    public float CalculateDistanceBetweenPlaces(float lat1, float lng1, float lat2, float lng2)
+    {
+        float r = 6371;        
+
+        float dlat = lat2 - lat1;
+        float dlng = lng2 - lng1;
+
+        float a = Mathf.Sin(dlat * Mathf.Deg2Rad / 2f) * Mathf.Sin(dlat * Mathf.Deg2Rad / 2f) +
+                                                                   Mathf.Cos(lat1 * Mathf.Deg2Rad) *
+                                                                   Mathf.Cos(lat2 * Mathf.Deg2Rad) *
+                                                                   Mathf.Sin(dlng * Mathf.Deg2Rad / 2f) *
+                                                                   Mathf.Sin(dlng * Mathf.Deg2Rad / 2f);
+        float c = 2 * Mathf.Atan2(Mathf.Sqrt(a), Mathf.Sqrt(1 - a));
+        float d = r * c;
+        return d;
     }
 }
