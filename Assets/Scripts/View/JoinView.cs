@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SettingView : View
+public class JoinView : View
 {
-
 }

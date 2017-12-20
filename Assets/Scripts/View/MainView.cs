@@ -68,11 +68,13 @@ public class MainView : View
     public void OnBookmarkButtonClick()
     {
         gameObject.SetActive(false);
+        UIManager.Instance.BookmarkView.gameObject.SetActive(true);
     }
 
     public void OnSettingButtonClick()
     {
         gameObject.SetActive(false);
+        UIManager.Instance.SettingView.gameObject.SetActive(true);
     }
 
     public void OnSearchButtonClick()
