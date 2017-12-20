@@ -11,6 +11,7 @@ public class AppManager : MonoSingleton<AppManager>
 
     public string LastAddress;
     public List<YoutubeData> NearbyYoutubeDataList = new List<YoutubeData>();
+    public List<YoutubeData> History = new List<YoutubeData>();
 
     private void Awake()
     {

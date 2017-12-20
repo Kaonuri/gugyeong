@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class WebViewController : MonoSingleton<WebViewController>
@@ -22,7 +23,16 @@ public class WebViewController : MonoSingleton<WebViewController>
     }
 
     private void OnPageFinished(UniWebView webView, int statusCode, string url)
-    {
+    {        
+        foreach (var data in YoutubeDataManager.Instance.YoutubeDataList)
+        {
+            if (data.id == videoId)
+            {
+                AppManager.Instance.History.Add(data);
+                break;
+            }
+        }
+
         webView.EvaluateJavaScript(string.Format("changeIframeUrl('https://www.youtube.com/embed/" + videoId + "?autoplay=1')"), payload => WebView.Show());
     }
 

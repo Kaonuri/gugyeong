@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 114617814830773198}
   - component: {fileID: 114220150103473566}
   m_Layer: 5
-  m_Name: Cell
+  m_Name: Bookmark Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
