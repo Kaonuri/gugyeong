@@ -7,6 +7,8 @@ public class NeighborhoodView : View
 {
     private int currentIndex;
     public Toggle favoriteButton;
+    public Text TitleLabel;
+    public Text AddressLabel;    
 
     private void OnEnable()
     {
@@ -18,6 +20,14 @@ public class NeighborhoodView : View
         currentIndex = 0;
 
         Load(currentIndex);
+    }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Cancel"))
+        {
+            OnBackButtonClick();
+        }
     }
 
     public void OnBackButtonClick()
@@ -90,7 +100,11 @@ public class NeighborhoodView : View
             }
         }
 
-        favoriteButton.isOn = isOn; 
+        favoriteButton.isOn = isOn;
+
+        YoutubeDataManager.PlaceInfo placeInfo = YoutubeDataManager.Instance.GetPlaceInfo(youtubeData);
+        TitleLabel.text = placeInfo.Name;
+        AddressLabel.text = placeInfo.Address;
 
         WebViewController.Instance.videoId = youtubeData.id;
         WebViewController.Instance.Load();

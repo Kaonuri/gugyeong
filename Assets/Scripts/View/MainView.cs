@@ -9,14 +9,6 @@ public class MainView : View
     public Text Address;
     public InputField SearchBarInputField;
 
-    private void Awake()
-    {
-    }
-
-    private void Start()
-    {        
-    }
-
     public void OnGpsButtonClick()
     {
         float lat = LocationManager.Instance.LastLocationData.latitude;

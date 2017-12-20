@@ -15,4 +15,12 @@ public class SettingView : View
         gameObject.SetActive(false);
         UIManager.Instance.MainView.gameObject.SetActive(true);
     }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Cancel"))
+        {
+            OnBackButtonClick();
+        }
+    }
 }

@@ -11,6 +11,7 @@ public class UIManager : MonoSingleton<UIManager>
     public ProfileSettingView ProfileSettingView;
     public JoinView JoinView;
     public LoginView LoginView;
+    public SingleVideoView SingleVideoView;
 
     private void Awake()
     {
@@ -21,5 +22,6 @@ public class UIManager : MonoSingleton<UIManager>
         ProfileSettingView.gameObject.SetActive(false);
         JoinView.gameObject.SetActive(false);
         LoginView.gameObject.SetActive(false);
+        SingleVideoView.gameObject.SetActive(false);
     }
 }

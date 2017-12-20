@@ -16,5 +16,4 @@ public class MemberInformation
 public class AppData
 {    
     public List<YoutubeData> FavoriteVideos;
-
 }

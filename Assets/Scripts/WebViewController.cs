@@ -16,6 +16,7 @@ public class WebViewController : MonoSingleton<WebViewController>
         WebView.SetVerticalScrollBarEnabled(false);
         WebView.BackgroundColor = Color.black;
         WebView.OnPageFinished += OnPageFinished;
+        WebView.SetBackButtonEnabled(false);
         url = UniWebViewHelper.StreamingAssetURLForPath("local_www/" + url);
         WebView.Hide();
     }

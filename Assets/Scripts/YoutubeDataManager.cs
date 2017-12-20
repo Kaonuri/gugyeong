@@ -109,12 +109,36 @@ public class YoutubeDataManager : MonoSingleton<YoutubeDataManager>
     public PlaceInfo GetPlaceInfo(YoutubeData data)
     {
         string[] split = data.snippet.description.Split('/');
-
+        
         PlaceInfo placeInfo = new PlaceInfo();
+
+        if (split.Length != 3)
+        {
+            placeInfo.Name = "N/A";
+            placeInfo.Address = "N/A";
+            placeInfo.Lat = 0f;
+            placeInfo.Lng = 0f;
+            return placeInfo;
+        }
+
         placeInfo.Name = split[0];
         placeInfo.Address = split[1];
-        placeInfo.Lat = float.Parse(split[2].Split(',')[0]);
-        placeInfo.Lng = float.Parse(split[2].Split(',')[1].TrimEnd('.'));
+        if (!float.TryParse(split[2].Split(',')[0], out placeInfo.Lat))
+        {
+            placeInfo.Lat = 0f;
+        }
+
+        if (split[2].Split(',').Length == 2)
+        {
+            if (!float.TryParse(split[2].Split(',')[1].TrimEnd('.'), out placeInfo.Lng))
+            {
+                placeInfo.Lng = 0f;
+            }
+        }
+        else
+        {
+            placeInfo.Lng = 0f;
+        }
         return placeInfo;
     }
 }

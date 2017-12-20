@@ -9,4 +9,12 @@ public class ProfileSettingView : View
         gameObject.SetActive(false);
         UIManager.Instance.SettingView.gameObject.SetActive(true);
     }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Cancel"))
+        {
+            OnBackButtonClick();
+        }
+    }
 }
